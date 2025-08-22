@@ -1,11 +1,9 @@
-package com.bourse.wealthwise.messaging;
+package com.bourse.wealthwise.domain.services;
 
 import com.bourse.wealthwise.domain.entity.action.Actor;
 import com.bourse.wealthwise.domain.entity.action.CapitalRaise;
 import com.bourse.wealthwise.domain.entity.portfolio.Portfolio;
 import com.bourse.wealthwise.domain.entity.security.Security;
-import com.bourse.wealthwise.domain.entity.security.SecurityType;
-import com.bourse.wealthwise.domain.services.PortfolioSharesService;
 import com.bourse.wealthwise.repository.ActionRepository;
 import com.bourse.wealthwise.repository.PortfolioRepository;
 import com.bourse.wealthwise.repository.SecurityRepository;
@@ -44,14 +42,15 @@ public class CapitalRaiseListenerService {
             double rightPerShare = Double.parseDouble(parts[2]);
 
             // Find the security by symbol
-            Security originalSecurity = findSecurityBySymbol(securitySymbol);
+            Security originalSecurity = securityRepository.findSecurityBySymbol(securitySymbol);
             if (originalSecurity == null) {
                 log.error("Security not found for symbol: {}", securitySymbol);
                 return;
             }
 
+            // Find the stock right security
             String rightSymbol = "H" + securitySymbol;
-            Security rightSecurity = findSecurityBySymbol(rightSymbol);
+            Security rightSecurity = securityRepository.findSecurityBySymbol(rightSymbol);
             if (rightSecurity == null) {
                 log.error("Stock right security not found for symbol: {}", rightSymbol);
                 return;
@@ -105,5 +104,4 @@ public class CapitalRaiseListenerService {
         log.info("Allocated {} rights of {} to portfolio {} (original holding: {})",
                 rightVolume, rightSecurity.getSymbol(), portfolio.getUuid(), originalVolume);
     }
-
 }
