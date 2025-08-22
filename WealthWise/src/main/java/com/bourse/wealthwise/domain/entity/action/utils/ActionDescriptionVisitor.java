@@ -1,11 +1,6 @@
 package com.bourse.wealthwise.domain.entity.action.utils;
 
-import com.bourse.wealthwise.domain.entity.action.Buy;
-import com.bourse.wealthwise.domain.entity.action.Sale;
-import com.bourse.wealthwise.domain.entity.action.Withdrawal;
-import com.bourse.wealthwise.domain.entity.action.Deposit;
-
-
+import com.bourse.wealthwise.domain.entity.action.*;
 
 
 import java.time.format.DateTimeFormatter;
@@ -47,4 +42,23 @@ public class ActionDescriptionVisitor implements ActionVisitor {
                 withdrawal.getDatetime().format(formatter),
                 withdrawal.getAmount());
     }
+
+    @Override
+    public String visit(CapitalRaise capitalRaise) {
+        return String.format("[%s] Capital Raise: Allocated %s rights of %s (%.2f rights per share)",
+                capitalRaise.getDatetime().format(formatter),
+                capitalRaise.getRightVolume(),
+                capitalRaise.getRightSecurity().getSymbol(),
+                capitalRaise.getRightPerShare());
+    }
+
+    @Override
+    public String visit(StockRightUsage stockRightUsage) {
+        return String.format("[%s] Stock Right Usage: Converted %s rights of %s to main shares (Cost: %s)",
+                stockRightUsage.getDatetime().format(formatter),
+                stockRightUsage.getVolumeToConvert(),
+                stockRightUsage.getRightSecurity().getSymbol(),
+                stockRightUsage.getConversionCost());
+    }
+
 }

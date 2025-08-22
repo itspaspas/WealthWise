@@ -5,5 +5,6 @@ public enum ActionType {
     SALE,
     DEPOSIT,
     WITHDRAWAL,
-
+    CAPITAL_RAISE,
+    STOCK_RIGHT_USAGE
 }
